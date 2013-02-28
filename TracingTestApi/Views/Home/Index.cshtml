@@ -1,0 +1,81 @@
+﻿<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>Tracing Test Api</h1>
+                @*<h2>Modify the code in this template to jump-start your ASP.NET Web API development.</h2>*@
+            </hgroup>
+            @*<p>
+                ASP.NET Web API allows you to expose your applications, data and services to the
+                web directly over HTTP.
+            </p>
+            <p>
+                To learn more about ASP.NET Web API visit the
+                <a href="http://go.microsoft.com/fwlink/?LinkID=238195" title="ASP.NET Web API Website">ASP.NET Web API Website</a>.
+                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET Web API.
+                If you have any questions about ASP.NET Web API, visit
+                <a href="http://go.microsoft.com/fwlink/?LinkID=238196" title="ASP.NET Web API Forum">our forums</a>.
+            </p>*@
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        @*<h3>We suggest the following steps:</h3>*@
+        <ol class="round">
+            <li class="one">
+                <h5>Make an api call by <a href="#" id="clickhere">clicking here</a></h5>
+                &nbsp;
+            </li>
+
+            <li class="two">
+                <h5>API Results</h5>
+                <div id="apiresults"><pre></pre></div>
+            </li>
+            <li class="three">
+                <h5>Trace Output</h5>
+                <div id="traceoutput">
+                    <ol id="tracemessages"></ol>
+
+                </div>
+            </li>
+        </ol>
+    </section>
+</div>
+
+@section scripts 
+{
+    <script src="~/Scripts/jquery.signalR-1.0.0.min.js"></script>
+    <script src="signalr/hubs"></script>
+    <script>
+        $(function () {
+            hub = $.connection.trace;
+            hub.client.logMessage = function (data) {
+                console.log(data);
+                var $dataLi = $('<li><pre /></li>'),
+                    $pre = $dataLi.find('pre'),
+                    traceoutput = $('#traceoutput');
+
+                $pre.text(data);
+                
+                $('#traceoutput').prepend($pre);
+
+                traceoutput.scrollTop(traceoutput[0].scrollHeight);
+
+            };
+
+            $.connection.hub.start();
+
+            $('#clickhere').click(function (e) {
+                /// <param name="e" type="jQuery.Event">jQuery Event Object</param>
+
+                $.getJSON('/api/Values', function (data, textStatus, jqXHR) {
+                    var jsonString = JSON.stringify(data);
+                    $("#apiresults pre").text(jsonString);
+                });
+
+            });
+
+
+        });
+
+    </script>
+}
