@@ -67,13 +67,12 @@
             $('#clickhere').click(function (e) {
                 /// <param name="e" type="jQuery.Event">jQuery Event Object</param>
 
-                $.getJSON('api/Values', function (data, textStatus, jqXHR) {
+                $.getJSON('@Url.HttpRouteUrl("DefaultApi", new { controller = "Values" })', function (data, textStatus, jqXHR) {
                     var jsonString = JSON.stringify(data);
                     $("#apiresults pre").text(jsonString);
                 });
 
             });
-
 
         });
 
