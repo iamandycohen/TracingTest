@@ -12,6 +12,7 @@ namespace TracingTestApi.Logging
     {
 
         private const string TRACE_FMT = "{0} {1}: Category={2}, Level={3}, Kind={4}, Operator={5}, Operation={6}, Message={7}, Exception={8}";
+        protected dynamic TraceDynamic;
 
         public virtual void Trace(HttpRequestMessage request, string category, TraceLevel level, Action<TraceRecord> traceAction)
         {
@@ -20,24 +21,23 @@ namespace TracingTestApi.Logging
                 var record = new TraceRecord(request, category, level);
 
                 traceAction(record);
+                TraceDynamic = GetTraceDynamic(record);
                 WriteTrace(record);
             }
         }
 
         public virtual string GetTraceString(TraceRecord traceRecord)
         {
-            var traceDynamic = GetTraceDynamic(traceRecord);
-
             string traceString = string.Format(TRACE_FMT,
-                 traceDynamic.Method,
-                 traceDynamic.Uri,
-                 traceDynamic.Category,
-                 traceDynamic.Level,
-                 traceDynamic.Kind,
-                 traceDynamic.Operator,
-                 traceDynamic.Operation,
-                 traceDynamic.Message,
-                 traceDynamic.Exception
+                 TraceDynamic.Method,
+                 TraceDynamic.Uri,
+                 TraceDynamic.Category,
+                 TraceDynamic.Level,
+                 TraceDynamic.Kind,
+                 TraceDynamic.Operator,
+                 TraceDynamic.Operation,
+                 TraceDynamic.Message,
+                 TraceDynamic.Exception
              );
 
             return traceString;
