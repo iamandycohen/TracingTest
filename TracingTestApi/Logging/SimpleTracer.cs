@@ -26,7 +26,7 @@ namespace TracingTestApi.Logging
         public virtual string GetTraceString(TraceRecord traceRecord)
         {
             var traceDynamic = GetTraceDynamic(traceRecord);
-            
+
             string trace = string.Format(TRACE_FMT,
                  traceDynamic.Method,
                  traceDynamic.Uri,
@@ -46,6 +46,7 @@ namespace TracingTestApi.Logging
         {
             dynamic traceDynamic = new ExpandoObject();
 
+            traceDynamic.Timestamp = traceRecord.Timestamp;
             traceDynamic.Method = traceRecord.Request != null ? traceRecord.Request.Method.ToString() : string.Empty;
             traceDynamic.Uri = traceRecord.Request != null && traceRecord.Request.RequestUri != null ? traceRecord.Request.RequestUri.ToString() : null;
             traceDynamic.Category = traceRecord.Category;

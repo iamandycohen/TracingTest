@@ -28,13 +28,14 @@
 
             <li class="two">
                 <h5>API Results</h5>
-                <div id="apiresults"><pre></pre></div>
+                <div id="apiresults">
+                    <pre></pre>
+                </div>
             </li>
             <li class="three">
                 <h5>Trace Output</h5>
+                <a href="#" id="clearoutput">Clear Output</a>
                 <div id="traceoutput">
-                    <ol id="tracemessages"></ol>
-
                 </div>
             </li>
         </ol>
@@ -47,22 +48,24 @@
     <script src="~/signalr/hubs"></script>
     <script>
         $(function () {
+
+            var $traceoutput = $('#traceoutput');
+
             hub = $.connection.trace;
             hub.client.logMessage = function (data) {
-                
-                var jData = JSON.stringify(data);
+
+                var jData = JSON.stringify(data, null, 4);
 
                 console.log(jData);
 
                 var $dataLi = $('<li><pre /></li>'),
-                    $pre = $dataLi.find('pre'),
-                    traceoutput = $('#traceoutput');
+                    $pre = $dataLi.find('pre');
 
                 $pre.text(jData);
-                
+
                 $('#traceoutput').prepend($pre);
 
-                traceoutput.scrollTop(traceoutput[0].scrollHeight);
+                $traceoutput.scrollTop($traceoutput[0].scrollHeight);
 
             };
 
@@ -76,6 +79,11 @@
                     $("#apiresults pre").text(jsonString);
                 });
 
+            });
+
+            $('#clearoutput').click(function (e) {
+                /// <param name="e" type="jQuery.Event">jQuery Event Object</param>
+                $traceoutput.html('');
             });
 
         });
