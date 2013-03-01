@@ -32,9 +32,11 @@ namespace TracingTestApi.Logging
         public override void WriteTrace(TraceRecord traceRecord)
         {
             string message = base.GetTraceString(traceRecord);
+
             Logger[traceRecord.Level](message);
-            SignalRHub.Hub.Clients.All.logMessage(message);
-            //base.WriteTrace(traceRecord);
+
+            var traceDynamic = base.GetTraceDynamic(traceRecord);
+            SignalRHub.Hub.Clients.All.logMessage(traceDynamic);
         }
     }
 

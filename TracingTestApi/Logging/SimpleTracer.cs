@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -24,19 +25,38 @@ namespace TracingTestApi.Logging
 
         public virtual string GetTraceString(TraceRecord traceRecord)
         {
+            var traceDynamic = GetTraceDynamic(traceRecord);
+            
             string trace = string.Format(TRACE_FMT,
-                 traceRecord.Request != null ? traceRecord.Request.Method.ToString() : string.Empty,
-                 traceRecord.Request != null && traceRecord.Request.RequestUri != null ? traceRecord.Request.RequestUri.ToString() : string.Empty,
-                 traceRecord.Category,
-                 traceRecord.Level,
-                 traceRecord.Kind,
-                 traceRecord.Operator,
-                 traceRecord.Operation,
-                 traceRecord.Message,
-                 traceRecord.Exception != null ? traceRecord.Exception.GetBaseException().Message : string.Empty
+                 traceDynamic.Method,
+                 traceDynamic.Uri,
+                 traceDynamic.Category,
+                 traceDynamic.Level,
+                 traceDynamic.Kind,
+                 traceDynamic.Operator,
+                 traceDynamic.Operation,
+                 traceDynamic.Message,
+                 traceDynamic.Exception
              );
 
             return trace;
+        }
+
+        public virtual dynamic GetTraceDynamic(TraceRecord traceRecord)
+        {
+            dynamic traceDynamic = new ExpandoObject();
+
+            traceDynamic.Method = traceRecord.Request != null ? traceRecord.Request.Method.ToString() : string.Empty;
+            traceDynamic.Uri = traceRecord.Request != null && traceRecord.Request.RequestUri != null ? traceRecord.Request.RequestUri.ToString() : null;
+            traceDynamic.Category = traceRecord.Category;
+            traceDynamic.Level = traceRecord.Level;
+            traceDynamic.Kind = traceRecord.Kind;
+            traceDynamic.Operator = traceRecord.Operator;
+            traceDynamic.Operation = traceRecord.Operation;
+            traceDynamic.Message = traceRecord.Message;
+            traceDynamic.Exception = traceRecord.Exception != null ? traceRecord.Exception.GetBaseException().Message : null;
+
+            return traceDynamic;
         }
 
         public virtual void WriteTrace(TraceRecord traceRecord)
