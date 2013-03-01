@@ -36,6 +36,7 @@ namespace TracingTestApi.Logging
             Logger[traceRecord.Level](message);
 
             var traceDynamic = base.GetTraceDynamic(traceRecord);
+
             SignalRHub.Hub.Clients.All.logMessage(traceDynamic);
         }
     }

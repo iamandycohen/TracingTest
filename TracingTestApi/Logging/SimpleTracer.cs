@@ -18,6 +18,7 @@ namespace TracingTestApi.Logging
             if (level != TraceLevel.Off)
             {
                 var record = new TraceRecord(request, category, level);
+
                 traceAction(record);
                 WriteTrace(record);
             }
@@ -27,7 +28,7 @@ namespace TracingTestApi.Logging
         {
             var traceDynamic = GetTraceDynamic(traceRecord);
 
-            string trace = string.Format(TRACE_FMT,
+            string traceString = string.Format(TRACE_FMT,
                  traceDynamic.Method,
                  traceDynamic.Uri,
                  traceDynamic.Category,
@@ -39,7 +40,7 @@ namespace TracingTestApi.Logging
                  traceDynamic.Exception
              );
 
-            return trace;
+            return traceString;
         }
 
         public virtual dynamic GetTraceDynamic(TraceRecord traceRecord)
@@ -62,8 +63,9 @@ namespace TracingTestApi.Logging
 
         public virtual void WriteTrace(TraceRecord traceRecord)
         {
-            string trace = GetTraceString(traceRecord);
-            System.Diagnostics.Trace.WriteLine(trace);
+            string traceString = GetTraceString(traceRecord);
+
+            System.Diagnostics.Trace.WriteLine(traceString);
         }
     }
 }
