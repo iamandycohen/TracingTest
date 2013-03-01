@@ -54,11 +54,12 @@
             hub = $.connection.trace;
             hub.client.logMessage = function (data) {
 
-                var jData = JSON.stringify(data, null, 4);
+                var jData = JSON.stringify(data, null, 4),
+                    $pre = $('<pre />');
 
-                console.log(jData);
-
-                var $pre = $('<pre />');
+                if (window.console && window.console.log) {
+                    console.log(jData);
+                }
 
                 $pre.text(jData);
 
