@@ -51,8 +51,8 @@ namespace TracingTestApi.Logging
             traceDynamic.Method = traceRecord.Request != null ? traceRecord.Request.Method.ToString() : string.Empty;
             traceDynamic.Uri = traceRecord.Request != null && traceRecord.Request.RequestUri != null ? traceRecord.Request.RequestUri.ToString() : null;
             traceDynamic.Category = traceRecord.Category;
-            traceDynamic.Level = traceRecord.Level;
-            traceDynamic.Kind = traceRecord.Kind;
+            traceDynamic.Level = traceRecord.Level.ToString();
+            traceDynamic.Kind = traceRecord.Kind.ToString();
             traceDynamic.Operator = traceRecord.Operator;
             traceDynamic.Operation = traceRecord.Operation;
             traceDynamic.Message = traceRecord.Message;
