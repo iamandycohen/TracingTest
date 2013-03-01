@@ -9,6 +9,9 @@ namespace TracingTestApi.Logging
 {
     public class SimpleTracer : ITraceWriter
     {
+
+        private const string TRACE_FMT = "{0} {1}: Category={2}, Level={3}, Kind={4}, Operator={5}, Operation={6}, Message={7}, Exception={8}";
+
         public virtual void Trace(HttpRequestMessage request, string category, TraceLevel level, Action<TraceRecord> traceAction)
         {
             if (level != TraceLevel.Off)
@@ -21,8 +24,7 @@ namespace TracingTestApi.Logging
 
         public virtual string GetTraceString(TraceRecord traceRecord)
         {
-            string trace = string.Format(
-                 "{0} {1}: Category={2}, Level={3} {4} {5} {6} {7}",
+            string trace = string.Format(TRACE_FMT,
                  traceRecord.Request != null ? traceRecord.Request.Method.ToString() : string.Empty,
                  traceRecord.Request != null && traceRecord.Request.RequestUri != null ? traceRecord.Request.RequestUri.ToString() : string.Empty,
                  traceRecord.Category,
@@ -30,11 +32,8 @@ namespace TracingTestApi.Logging
                  traceRecord.Kind,
                  traceRecord.Operator,
                  traceRecord.Operation,
-                 traceRecord.Exception != null
-                     ? traceRecord.Exception.GetBaseException().Message
-                     : !string.IsNullOrEmpty(traceRecord.Message)
-                         ? traceRecord.Message
-                         : string.Empty
+                 traceRecord.Message,
+                 traceRecord.Exception != null ? traceRecord.Exception.GetBaseException().Message : string.Empty
              );
 
             return trace;
